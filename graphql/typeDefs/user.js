@@ -9,6 +9,9 @@ const userTypeDefs = gql`
 
   type Mutation {
     createUser(input: CreateUserInput!): User
+    verifyUser(input: VerifyUserInput!): User
+    updatePassword(input: UpdateUserInput!): User
+    deleteUser(id: ID!): User
   }
 
   type User {
@@ -37,6 +40,17 @@ const userTypeDefs = gql`
   input LoginInput {
     email: String
     password: String
+  }
+
+  input UpdateUserInput {
+    email: String
+    password: String
+  }
+
+  input VerifyUserInput {
+    id: ID
+    token: Int
+    type: String
   }
 `;
 
