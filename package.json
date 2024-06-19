@@ -1,0 +1,28 @@
+{
+  "name": "lets-cook-backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "sql": "/usr/local/mysql/bin/mysql -u root -p",
+    "migrate-up": "npx sequelize-cli db:migrate",
+    "migrate-down": "npx sequelize-cli db:migrate:undo",
+    "migrate-down-all": "npx sequelize-cli db:migrate:undo:all",
+    "migrate-create": "npx sequelize-cli migration:generate --name"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "apollo-server-express": "^3.13.0",
+    "bcrypt": "^5.1.1",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "express-graphql": "^0.12.0",
+    "graphql": "^15.8.0",
+    "mysql": "^2.18.1",
+    "mysql2": "^3.10.1",
+    "sequelize": "^6.37.3"
+  }
+}
