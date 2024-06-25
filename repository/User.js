@@ -1,5 +1,7 @@
 const User = require('../models/User');
-const { getHashedPassword, comparePasswords } = require('../utils')
+const Follow = require('../models/Follow');
+
+const { getHashedPassword, comparePasswords } = require('../utils');
 
 const findAllUsers = async () => {
   try {
@@ -43,13 +45,8 @@ const getUserByEmailAndPassword = async (input) => {
     const { email, password } = input
     const user = await User.findOne({ where: { email } })
 
-    if (user) {
-      const passwordMatch = await comparePasswords(password, user.toJSON().password)
-        if (passwordMatch) {
-          return user
-        }
-
-        throw new Error('Invalid credentials')
+    if (user && await comparePasswords(password, user.toJSON().password)) {
+      return user;
     }
 
     throw new Error('Invalid credentials')
@@ -67,8 +64,7 @@ const updateUser = async (input) => {
       throw new Error('User not found');
     }
 
-    const hashedPassword = await getHashedPassword(password);
-    user.password = hashedPassword;
+    user.password = await getHashedPassword(password);
     await user.save();
     return user
   } catch (error) {
@@ -79,6 +75,11 @@ const updateUser = async (input) => {
 const deleteUser = async (userId) => {
   try {
     const user = await User.findByPk(userId);
+
+    if (!user) {
+      throw new Error('User not found');
+    }
+
     await user.destroy();
     return user
   } catch (error) {
@@ -89,11 +90,49 @@ const deleteUser = async (userId) => {
 const verifyUser = async (userId) => {
   try {
     const user = await User.findByPk(userId);
+    
+    if (!user) {
+      throw new Error('User not found');
+    }
+
     user.verified = "Yes";
     await user.save();
     return user
   } catch (error) {
     throw new Error('Unable to verify user');
+  }
+}
+
+const followUser = async (input) => {
+  try {
+    const { follower, following } = input;
+    if (follower === following) {
+      throw new Error('Unable to follow own account');
+    }
+    
+    const foundFollowing = await Follow.findOne({ where: { follower, following }});
+    if (foundFollowing) {
+      throw new Error('Unable to follow as already following currently');
+    }
+
+    await Follow.create({ follower, following });
+    return findUserById(following);
+  } catch (error) {
+    throw new Error(error.message);
+  }
+}
+
+const unfollowUser = async (input) => {
+  try {
+    const { follower, following } = input;
+    const foundFollowing = await Follow.findOne({ where: { follower, following }});
+    if (!foundFollowing) {
+      throw new Error('Unable to unfollow as not following currently');
+    }
+    await foundFollowing.destroy();
+    return findUserById(following);
+  } catch (error) {
+    throw new Error(error.message);
   }
 }
 
@@ -104,5 +143,7 @@ module.exports = {
   getUserByEmailAndPassword,
   updateUser,
   deleteUser,
-  verifyUser
+  verifyUser,
+  followUser,
+  unfollowUser
 };

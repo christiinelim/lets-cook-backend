@@ -1,4 +1,4 @@
-const { createUser, updateUser, deleteUser, verifyUser } = require("../../../repository/User");
+const { createUser, updateUser, deleteUser, verifyUser, followUser, unfollowUser } = require("../../../repository/User");
 const { createToken, verifyToken } = require("../../../repository/Token");
 const { sendTokenEmail } = require("../../../services/emailService");
 
@@ -22,6 +22,12 @@ const userMutations = {
     },
     deleteUser: async (_root, { id }) => {
         return await deleteUser(id)
+    },
+    followUser: async (_root, { input }) => {
+        return await followUser(input)
+    },
+    unfollowUser: async (_root, { input }) => {
+        return await unfollowUser(input)
     }
 };
   

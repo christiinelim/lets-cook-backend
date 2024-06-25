@@ -150,3 +150,65 @@ mutation($input: VerifyUserInput!) {
   }
 }
 ```
+
+#### Follow User
+```
+mutation($input: FollowInput!) {
+  followUser(input: $input) {
+    id
+    first_name
+    last_name
+  }
+}
+
+{
+  "input": {
+    "follower": "2",
+    "following": "8"
+  }
+}
+```
+
+#### Unfollow User
+```
+mutation($input: FollowInput!) {
+  unfollowUser(input: $input) {
+    id
+    first_name
+    last_name
+  }
+}
+
+{
+  "input": {
+    "follower": "8",
+    "following": "2"
+  }
+}
+```
+
+### User
+
+#### Get All Categories
+```
+query {
+  getCategories {
+    id
+    category
+  }
+}
+```
+
+#### Get Category
+```
+query($getCategoryId: ID!) {
+  getCategory(id: $getCategoryId) {
+    id
+    category
+  }
+}
+
+{
+  "getCategoryId": "2"
+}
+```

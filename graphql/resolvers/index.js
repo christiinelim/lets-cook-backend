@@ -1,8 +1,10 @@
 const { userQueries, userMutations } = require("./user");
+const { categoryQueries } = require("./category");
 
 const resolvers = {
     Query: {
-        ...userQueries
+        ...userQueries,
+        ...categoryQueries
     },
     Mutation: {
         ...userMutations

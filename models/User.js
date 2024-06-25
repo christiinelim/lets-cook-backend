@@ -1,6 +1,8 @@
 const sequelize = require("../sequelize");
 const { DataTypes } = require("sequelize");
 
+const Follow = require('./Follow');
+
 const User = sequelize.define("User", {
   username: {
     type: DataTypes.STRING,
@@ -38,6 +40,20 @@ const User = sequelize.define("User", {
 }, {
   createdAt: 'created_at', 
   updatedAt: 'updated_at'
+});
+
+User.belongsToMany(User, {
+  through: Follow,
+  as: 'followers',
+  foreignKey: 'following',
+  otherKey: 'follower',
+});
+
+User.belongsToMany(User, {
+  through: Follow,
+  as: 'following',
+  foreignKey: 'follower',
+  otherKey: 'following',
 });
 
 module.exports = User;
