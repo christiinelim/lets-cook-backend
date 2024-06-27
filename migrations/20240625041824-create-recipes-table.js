@@ -53,6 +53,16 @@ module.exports = {
         },
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE'
+      },
+      user: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'Users',
+          key: 'id'
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE'
       }
     });
 
@@ -67,10 +77,23 @@ module.exports = {
       onDelete: 'CASCADE',
       onUpdate: 'CASCADE'
     });
+
+    await queryInterface.addConstraint('Recipes', {
+      fields: ['user'],
+      type: 'foreign key',
+      name: 'fk_recipe_user_id',
+      references: {
+        table: 'Users',
+        field: 'id'
+      },
+      onDelete: 'CASCADE',
+      onUpdate: 'CASCADE'
+    });
   },
 
   async down (queryInterface, Sequelize) {
     await queryInterface.removeConstraint('Recipes', 'fk_category_recipe');
+    await queryInterface.removeConstraint('Recipes', 'fk_recipe_user_id');
     await queryInterface.dropTable('Recipes');
   }
 };

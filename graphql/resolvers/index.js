@@ -1,13 +1,19 @@
 const { userQueries, userMutations } = require("./user");
 const { categoryQueries } = require("./category");
+const { recipeQueries, recipeMutations, recipeFieldResolvers } = require('./recipe');
 
 const resolvers = {
     Query: {
         ...userQueries,
-        ...categoryQueries
+        ...categoryQueries,
+        ...recipeQueries
     },
     Mutation: {
-        ...userMutations
+        ...userMutations,
+        ...recipeMutations
+    },
+    Recipe: {
+        ...recipeFieldResolvers,
     }
 };
 

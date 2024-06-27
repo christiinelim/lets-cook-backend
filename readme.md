@@ -212,3 +212,39 @@ query($getCategoryId: ID!) {
   "getCategoryId": "2"
 }
 ```
+
+### Recipes
+
+#### Create Recipe
+```
+mutation($input: CreateRecipeInput!) {
+  createRecipe(input: $input) {
+    id
+    title
+    description
+    duration
+    ingredients
+    instructions
+    category {
+      category
+    }
+    user {
+      first_name
+      last_name
+    }
+  }
+}
+
+{
+  "input": {
+    "image": "www.test.com",
+    "title": "Sour Dough",
+    "description": "Perfect serving for breakfast!",
+    "duration": 100,
+    "ingredients": "Sugar, flour, cornstarch",
+    "instructions": "1. Mix the dough 2. Put in refrigerator for 30 minutes 3. Bake in oven for 30 minutes at 180 degrees",
+    "category": "4",
+    "user": "2"
+  }
+}
+```
